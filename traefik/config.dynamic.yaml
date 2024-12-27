@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://json.schemastore.org/traefik-v2-file-provider.json
+http:
+  routers:
+    traefik-dashboard:
+      rule: Host(`traefik.kalny.net`)
+      service: api@internal
+      tls:
+        certResolver: production
+      middlewares:
+        - basic-auth
+
+    personal-site:
+      rule: Host(`filip.kalny.net`)
+      service: personal-site
+      tls:
+        certResolver: production
+
+  services:
+    personal-site:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: https://totalolage.github.io
+
+  middlewares:
+    basic-auth:
+      basicAuth:
+        users:
+          - filip:$2y$05$n9gWEoJFxC0TCmZsiB9zfeR1.cFBDO0eatYbFw4NhGxuBkwlUGk9y
+

@@ -1,0 +1,56 @@
+
+services:
+  pds:
+    image: ghcr.io/bluesky-social/pds:0.4
+    env_file: env
+    secrets:
+      - source: pds_secrets
+        target: /run/secrets/secrets.env
+    # Need to prepend the normal command with a custom script to load secrets
+    command:
+      - sh
+      - -c
+      - |
+        # Load secrets from /run/secrets/secrets.env
+        set -o allexport
+        source /run/secrets/secrets.env
+        set +o allexport
+        # Replace the SMTP password with the actual value
+        export PDS_EMAIL_SMTP_URL="$$(echo "$$PDS_EMAIL_SMTP_URL" | sed "s/\$$SMTP_PASSWORD/$$SMTP_PASSWORD/g")"
+        # Original command taken from https://github.com/bluesky-social/pds/blob/main/Dockerfile
+        node --enable-source-maps index.js
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/xrpc/_health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - type: volume
+        source: pds
+        target: /pds
+    networks:
+      - default
+      - proxy
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=proxy
+        - traefik.http.routers.pds.tls=true
+        - traefik.http.routers.pds.tls.certresolver=production
+        - traefik.http.routers.pds.rule=Host(`atproto.kalny.net`)
+        - traefik.http.services.pds-pds.loadbalancer.server.port=3000
+        - traefik.http.services.pds-pds.loadbalancer.healthcheck.path=/xrpc/_health
+
+
+volumes:
+  pds:
+
+networks:
+  proxy:
+    external: true
+
+secrets:
+  pds_secrets:
+    external: true

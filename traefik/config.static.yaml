@@ -1,0 +1,45 @@
+# yaml-language-server: $schema=https://json.schemastore.org/traefik-v3.json
+log:
+  level: DEBUG
+accesslog: true
+ping: {}
+api:
+  dashboard: true
+  insecure: true
+providers:
+  file:
+    filename: /etc/traefik/config.dynamic.yaml
+  docker:
+    exposedByDefault: false
+  swarm:
+    network: proxy
+entrypoints:
+  web:
+    address: '[::]:80'
+    http:
+      redirections:
+        entrypoint:
+          to: websecure
+          scheme: https
+  websecure:
+    address: '[::]:443'
+defaultEntryPoints: ["web", "websecure"]
+
+# TLS congifuration
+certificatesresolvers:
+  staging:
+    acme:
+      email: admin@kalny.net
+      storage: /letsencrypt/acme.staging.json
+      caserver: https://acme-staging-v02.api.letsencrypt.org/directory
+      httpchallenge:
+        entrypoint: web
+      tlschallenge: true
+
+  production:
+    acme:
+      email: admin@kalny.net
+      storage: /letsencrypt/acme.json
+      httpchallenge:
+        entrypoint: web
+      tlschallenge: true

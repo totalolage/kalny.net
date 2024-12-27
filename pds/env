@@ -1,0 +1,14 @@
+PDS_HOSTNAME=atproto.kalny.net
+PDS_DATA_DIRECTORY=/pds
+PDS_BLOBSTORE_DISK_LOCATION=/pds/blocks
+PDS_BLOB_UPLOAD_LIMIT=52428800
+PDS_DID_PLC_URL=https://plc.directory
+PDS_BSKY_APP_VIEW_URL=https://api.bsky.app
+PDS_BSKY_APP_VIEW_DID=did:web:api.bsky.app
+PDS_REPORT_SERVICE_URL=https://mod.bsky.app
+PDS_REPORT_SERVICE_DID=did:plc:ar7c4by46qjdydhdevvrndac
+PDS_CRAWLERS=https://bsky.network
+LOG_ENABLED=true
+PDS_SERVICE_HANDLE_DOMAINS=.kalny.net
+PDS_EMAIL_SMTP_URL=smtp://filip%40kalny.net:$SMTP_PASSWORD@smtppro.zoho.eu
+PDS_EMAIL_FROM_ADDRESS=filip@kalny.net

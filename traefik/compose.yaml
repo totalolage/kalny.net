@@ -1,0 +1,46 @@
+services:
+  traefik:
+    image: traefik:v3.2
+    configs:
+      - source: dynamic_config_04fe97df59d8502883bdacbc5bd57702
+        target: /etc/traefik/config.dynamic.yaml
+      - source: static_config_a12ab8a073fe4f9a8807d35b42ceb094
+        target: /etc/traefik/config.static.yaml
+    command:
+      - --configFile=/etc/traefik/config.static.yaml
+    
+    healthcheck:
+      test: ["CMD", "traefik", "healthcheck", "--ping"]
+
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    networks:
+      - default
+      - proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/letsencrypt:/letsencrypt
+      # - /var/log/traefik:/var/log/traefik
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - traefik.docker.lbswarm=true
+        # - traefik.http.routers.traefik-traefik.rule=Host(`traefik-traefik`)
+        - traefik.http.routers.traefik-traefik.entrypoints=traefik
+        - traefik.http.services.traefik-traefik.loadbalancer.server.port=8080
+
+configs:
+  dynamic_config_04fe97df59d8502883bdacbc5bd57702:
+    file: ./config.dynamic.yaml
+  static_config_a12ab8a073fe4f9a8807d35b42ceb094:
+    file: ./config.static.yaml
+
+networks:
+  proxy:
+    external: true
