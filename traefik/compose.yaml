@@ -2,9 +2,9 @@ services:
   traefik:
     image: traefik:v3.2
     configs:
-      - source: dynamic_config_04fe97df59d8502883bdacbc5bd57702
+      - source: dynamic_config_734736259836d13fb047d4a9ff9a7063
         target: /etc/traefik/config.dynamic.yaml
-      - source: static_config_a12ab8a073fe4f9a8807d35b42ceb094
+      - source: static_config_d79d99998253ec11ad60b94f60b48828
         target: /etc/traefik/config.static.yaml
     command:
       - --configFile=/etc/traefik/config.static.yaml
@@ -36,9 +36,9 @@ services:
         - traefik.http.services.traefik-traefik.loadbalancer.server.port=8080
 
 configs:
-  dynamic_config_04fe97df59d8502883bdacbc5bd57702:
+  dynamic_config_734736259836d13fb047d4a9ff9a7063:
     file: ./config.dynamic.yaml
-  static_config_a12ab8a073fe4f9a8807d35b42ceb094:
+  static_config_d79d99998253ec11ad60b94f60b48828:
     file: ./config.static.yaml
 
 networks:

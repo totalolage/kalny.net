@@ -10,10 +10,18 @@ http:
         - basic-auth
 
     personal-site:
+      rule: Host(`filip.is-a.dev`)
+      service: personal-site
+      # tls:
+      #   certResolver: production
+
+    personal-site-redirect:
       rule: Host(`filip.kalny.net`)
       service: personal-site
       tls:
         certResolver: production
+      middlewares:
+        - redirect-to-filip-is-a-dev
 
   services:
     personal-site:
@@ -27,4 +35,9 @@ http:
       basicAuth:
         users:
           - filip:$2y$05$n9gWEoJFxC0TCmZsiB9zfeR1.cFBDO0eatYbFw4NhGxuBkwlUGk9y
+
+    redirect-to-filip-is-a-dev:
+      redirectRegex:
+        regex: ^https?://[^/]+/(.*)$
+        replacement: https://filip.is-a.dev/$1
 
