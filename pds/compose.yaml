@@ -39,7 +39,7 @@ services:
         - traefik.docker.network=proxy
         - traefik.http.routers.pds.tls=true
         - traefik.http.routers.pds.tls.certresolver=production
-        - traefik.http.routers.pds.rule=Host(`atproto.kalny.net`)
+        - traefik.http.routers.pds.rule=Host(`atproto.kalny.net`) || PathPrefix(`/.well-known/atproto-did`)
         - traefik.http.services.pds-pds.loadbalancer.server.port=3000
         - traefik.http.services.pds-pds.loadbalancer.healthcheck.path=/xrpc/_health
 
