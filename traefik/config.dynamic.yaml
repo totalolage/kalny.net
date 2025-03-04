@@ -12,8 +12,8 @@ http:
     personal-site:
       rule: Host(`filip.is-a.dev`)
       service: personal-site
-      # tls:
-      #   certResolver: production
+      tls:
+        certResolver: production
 
     personal-site-redirect:
       rule: Host(`filip.kalny.net`)

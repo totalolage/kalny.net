@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://json.schemastore.org/traefik-v3.json
 log:
-  level: INFO
+  level: ERROR
 accesslog: true
 ping: {}
 api:
@@ -34,7 +34,7 @@ certificatesresolvers:
       caserver: https://acme-staging-v02.api.letsencrypt.org/directory
       httpchallenge:
         entrypoint: web
-      tlschallenge: true
+      # tlschallenge: true
 
   production:
     acme:
@@ -42,4 +42,4 @@ certificatesresolvers:
       storage: /letsencrypt/acme.json
       httpchallenge:
         entrypoint: web
-      tlschallenge: true
+      # tlschallenge: true
